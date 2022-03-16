@@ -1,4 +1,4 @@
-# Syntax Coloring for AM1008_W_K_I2C Library
+# Syntax Coloring for CB-HCHO-V4 Library
 # Datatypes (KEYWORD1)
 CB_HCHO_V4	KEYWORD1
 
