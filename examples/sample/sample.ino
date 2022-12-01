@@ -1,13 +1,13 @@
 #include <SoftwareSerial.h>
-#include "CB_HCHO_V4.h"
+#include <AM1002_UART.h>
 
 SoftwareSerial mySerial(2, 3);
 
-CB_HCHO_V4 hcho(&mySerial);
+AM1002_UART am1002(&mySerial);
 
-void setup()
-{
+char version[13];
 
+void setup() {
   mySerial.begin(9600);
   Serial.begin(9600);
 
@@ -16,32 +16,37 @@ void setup()
   }
 }
 
-void loop()
-{
-  bool success = hcho.read();
+void loop() {
+  bool success = am1002.measure();
 
   if (success)
   {
-    Serial.print("HCHO : ");
-    Serial.println(hcho.getHcho());
+    Serial.print("TVOC : ");
+    Serial.println(am1002.getTvoc());
 
-    Serial.print("VOC : ");
-    Serial.println(hcho.getVoc());
+    Serial.print("PM 1.0 : ");
+    Serial.println(am1002.getPm1p0());
 
-    Serial.print("Temp : ");
-    Serial.println(hcho.getTemp());
+    Serial.print("PM 2.5 : ");
+    Serial.println(am1002.getPm2p5());
+
+    Serial.print("PM 10 : ");
+    Serial.println(am1002.getPm10());
+
+    Serial.print("Temperature : ");
+    Serial.println(am1002.getTemperature());
 
     Serial.print("Humidity : ");
-    Serial.println(hcho.getHumidity());
+    Serial.println(am1002.getHumidity());
+  }
 
-    Serial.print("TVOC : ");
-    Serial.println(hcho.getTvoc());
+  success = am1002.requestSoftwareVersionNumber();
 
-    Serial.print("Sensor status : ");
-    Serial.println(hcho.getSensorStatus());
-
-    Serial.print("Auto calibration switch : ");
-    Serial.println(hcho.getAutoCalibrationSwitch());
+  if (success)
+  {
+    am1002.readSoftwareVersionNumber(version);
+    Serial.print("Version : ");
+    Serial.println(version);
   }
 
   delay(3000);
